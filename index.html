@@ -473,9 +473,22 @@
     color: #3a0516; background: linear-gradient(90deg, #f5d6a0, #ffe9b8); box-shadow: 0 6px 22px rgba(245,214,160,.5);
     z-index: 10;
   }
-  .carta-surpresa.aberta ~ .surpresa-link { display: block; animation: aparecer-link .6s .5s both; }
+  .carta-wrap.aberta .surpresa-link { display: block; animation: aparecer-link .6s .5s both; }
   @keyframes aparecer-link { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
-  .carta-surpresa.aberta ~ .dica-carta { opacity: 0; }
+  .carta-wrap.aberta .dica-carta { opacity: 0; }
+  .carta-wrap.aberta .balao { opacity: 0; transform: scale(.6); pointer-events: none; }
+  .carta-linha { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .balao {
+    position: relative; max-width: 124px; padding: 9px 12px; border: 0; cursor: pointer; border-radius: 16px;
+    font: 700 .74rem/1.25 'Quicksand', sans-serif; color: #6d1a2c; text-align: center;
+    background: #fffaf0; box-shadow: 0 6px 18px rgba(0,0,0,.45);
+    animation: balancar-balao 3.4s ease-in-out infinite; transition: opacity .6s ease, transform .6s ease;
+  }
+  .balao::before {                       /* pontinha do balão apontando pro envelope */
+    content: ''; position: absolute; left: -7px; top: 50%; width: 14px; height: 14px; background: #fffaf0;
+    transform: translateY(-50%) rotate(45deg); border-radius: 2px;
+  }
+  @keyframes balancar-balao { 0%,100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-5px) rotate(1.5deg); } }
   .dica-carta { font-size: .72rem; opacity: .75; margin-top: 4px; min-height: 1em; transition: opacity .4s; }
 
   /* ===== Animações suaves extras ===== */
@@ -606,6 +619,7 @@
 </div>
 
   <div class="carta-wrap" style="position:relative;display:flex;flex-direction:column;align-items:center">
+    <div class="carta-linha">
     <button class="carta-surpresa" id="carta-surpresa" type="button" aria-label="Abrir a cartinha-surpresa" aria-expanded="false">
       <span class="env-corpo"></span>
       <span class="env-papel"><span class="anel">&#128141;</span><span class="anel-txt">Alianças</span></span>
@@ -613,6 +627,8 @@
       <span class="env-aba"></span>
       <span class="selo-cera">&#10084;</span>
     </button>
+    <button class="balao" id="balao-carta" type="button" aria-hidden="true" tabindex="-1">Clique para a surpresa &#10084;</button>
+    </div>
     <a class="surpresa-link" id="surpresa-link" href="https://lista.mercadolivre.com.br/aliancas" target="_blank" rel="noopener noreferrer">&#128141; Ver as alianças no Mercado Livre &#8599;</a>
     <span class="dica-carta" id="dica-carta">toque na cartinha</span>
   </div>
@@ -1507,11 +1523,15 @@
   /* ===== Cartinha-surpresa ===== */
   (() => {
     const b = document.getElementById('carta-surpresa'), dica = document.getElementById('dica-carta');
-    b.addEventListener('click', () => {
+    const wrap = b.closest('.carta-wrap');
+    const alternar = () => {
       const abriu = b.classList.toggle('aberta');
+      wrap.classList.toggle('aberta', abriu);
       b.setAttribute('aria-expanded', String(abriu));
       dica.textContent = abriu ? 'uma surpresa pra nós dois' : 'toque na cartinha';
-    });
+    };
+    b.addEventListener('click', alternar);
+    document.getElementById('balao-carta').addEventListener('click', alternar);
   })();
 
   /* ===== Corações flutuando no fundo + entrada escalonada dos quadradinhos ===== */
