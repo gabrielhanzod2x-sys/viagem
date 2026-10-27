@@ -1413,7 +1413,7 @@
   const faixas = [MUSICA, MUSICA2]; let faixa = 0;
   audio.src = faixas[0]; audio.volume = 0.5;
   // quando uma música acaba, toca a próxima e volta pra primeira (playlist em loop)
-  audio.addEventListener('ended', () => { faixa = (faixa + 1) % faixas.length; audio.src = faixas[faixa]; audio.play().catch(() => {}); });
+  audio.addEventListener('ended', () => { audio.pause(); faixa = (faixa + 1) % faixas.length; audio.src = faixas[faixa]; audio.load(); audio.play().catch(() => {}); });
   let musicaPausadaPeloUsuario = false;
   function marcarMusica() { botaoMusica.classList.toggle('tocando', !audio.paused); }
   audio.addEventListener('play', marcarMusica); audio.addEventListener('pause', marcarMusica);
@@ -1428,6 +1428,15 @@
   addEventListener('keydown', comecarMusica, { once: true });
   audio.play().catch(() => {});
   marcarMusica();
+  // só uma aba toca por vez, e só uma música por vez (evita som misturado)
+  const meuId = Math.random().toString(36).slice(2);
+  const canal = 'BroadcastChannel' in window ? new BroadcastChannel('viagem-musica') : null;
+  audio.addEventListener('play', () => { if (canal) canal.postMessage({ tocando: meuId }); });
+  if (canal) canal.onmessage = e => { if (e.data && e.data.tocando && e.data.tocando !== meuId) audio.pause(); };
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) audio.pause();
+    else if (!musicaPausadaPeloUsuario) audio.play().catch(() => {});
+  });
 
   /* ===== Mapa-múndi: o carro/avião viajando por vários países ===== */
   const mapaMundi = (() => {
