@@ -435,9 +435,10 @@
     background: linear-gradient(160deg, #f3e3c2, #dcc79b); box-shadow: 0 10px 24px rgba(0,0,0,.55), inset 0 0 0 1px rgba(120,85,40,.35);
   }
   .env-papel {                          /* cartinha dentro */
-    bottom: 6px; height: 74px; margin: 0 10px; border-radius: 3px; background: #fffaf0; box-shadow: 0 1px 4px rgba(0,0,0,.3);
-    display: grid; place-items: center; font-family: Georgia, serif; color: #6d1a2c; font-size: .72rem; text-align: center; line-height: 1.25;
-    transition: transform .8s cubic-bezier(.22,.8,.25,1); z-index: 2;
+    bottom: 6px; height: 98px; margin: 0 10px; border-radius: 3px; background: linear-gradient(180deg, #fffdf6, #f7ecd0); box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 8px; gap: 2px;
+    font-family: Georgia, serif; color: #6d1a2c; text-align: center;
+    transform: translateY(20px); transition: transform 1s cubic-bezier(.22,.8,.25,1); z-index: 2;
   }
   .env-frente {                         /* frente com as dobras laterais e de baixo */
     bottom: 0; height: 84px; z-index: 3; border-radius: 4px; pointer-events: none;
@@ -462,17 +463,20 @@
   @keyframes pulinho { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
   .carta-surpresa.aberta .env-aba { transform: rotateX(180deg); z-index: 1; }
   .carta-surpresa.aberta .selo-cera { opacity: 0; }
-  .carta-surpresa.aberta .env-papel { transform: translateY(-46px); }
+  .carta-surpresa.aberta .env-papel { transform: translateY(-52px); }
+  .env-papel .anel { font-size: 1.7rem; line-height: 1; filter: drop-shadow(0 2px 3px rgba(120,60,0,.35)); }
+  .env-papel .anel-txt { font-size: .78rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
   .surpresa-link {
-    display: none; position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, -4px); margin-bottom: 4px;
+    display: none; position: absolute; left: 50%; bottom: -6px; transform: translate(-50%, 0);
     white-space: nowrap; text-decoration: none; padding: 10px 18px; border-radius: 99px;
     font-family: 'Arial Black', Arial, sans-serif; text-transform: uppercase; font-size: .72rem; letter-spacing: .06em;
     color: #3a0516; background: linear-gradient(90deg, #f5d6a0, #ffe9b8); box-shadow: 0 6px 22px rgba(245,214,160,.5);
     z-index: 10;
   }
   .carta-surpresa.aberta ~ .surpresa-link { display: block; animation: aparecer-link .6s .5s both; }
-  @keyframes aparecer-link { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, -4px); } }
-  .dica-carta { font-size: .72rem; opacity: .75; margin-top: 4px; }
+  @keyframes aparecer-link { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  .carta-surpresa.aberta ~ .dica-carta { opacity: 0; }
+  .dica-carta { font-size: .72rem; opacity: .75; margin-top: 4px; min-height: 1em; transition: opacity .4s; }
 
   /* ===== Animações suaves extras ===== */
   .frase-topo { background-size: 220% 100%; animation: brilhar 7s ease-in-out infinite; }
@@ -604,7 +608,7 @@
   <div class="carta-wrap" style="position:relative;display:flex;flex-direction:column;align-items:center">
     <button class="carta-surpresa" id="carta-surpresa" type="button" aria-label="Abrir a cartinha-surpresa" aria-expanded="false">
       <span class="env-corpo"></span>
-      <span class="env-papel">Uma surpresa<br>pra nós dois &#10084;</span>
+      <span class="env-papel"><span class="anel">&#128141;</span><span class="anel-txt">Alianças</span></span>
       <span class="env-frente"></span>
       <span class="env-aba"></span>
       <span class="selo-cera">&#10084;</span>
