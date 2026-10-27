@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
+    --ch: clamp(250px, 50vh, 390px);
     --bg1: #0b0a1f;
     --bg2: #2a0f3a;
     --rosa: #ff8fb1;
@@ -55,24 +56,24 @@
   /* ===== Carrossel de cards ===== */
   .palco {
     position: relative; z-index: 1;
-    width: min(100vw, 900px); height: 420px;
+    width: min(100vw, 960px); height: calc(var(--ch) * 1.12);
     perspective: 1200px;
   }
   .palco::before {                       /* brilho vermelho atrás do card ativo */
     content: ''; position: absolute; left: 50%; top: 50%;
-    width: 520px; height: 300px; transform: translate(-50%, -50%);
+    width: calc(var(--ch) * 1.5); height: calc(var(--ch) * .85); transform: translate(-50%, -50%);
     background: radial-gradient(ellipse, rgba(255,30,50,.45), transparent 70%);
     filter: blur(30px); pointer-events: none;
   }
   .card {
     position: absolute; left: 50%; top: 50%;
-    width: 230px; height: 330px; margin: -165px 0 0 -115px;
+    width: calc(var(--ch) * .692); height: var(--ch); margin: calc(var(--ch) * -.5) 0 0 calc(var(--ch) * -.346);
     border-radius: 18px; overflow: hidden; cursor: pointer;
     border: 1px solid rgba(255,255,255,.18);
     background: #2b0a12;
     box-shadow: 0 20px 50px rgba(0,0,0,.55);
     transition: transform .7s cubic-bezier(.22,.8,.25,1), opacity .7s, filter .7s, box-shadow .7s;
-    transform: translateX(calc(var(--pos) * 260px)) scale(.78);
+    transform: translateX(calc(var(--pos) * var(--ch) * .77)) scale(.78);
     opacity: .45; filter: brightness(.55) saturate(.7);
     z-index: 1;
   }
@@ -104,9 +105,9 @@
     -webkit-text-stroke: 1px rgba(0,0,0,.55); paint-order: stroke fill;
     text-shadow: 0 2px 0 rgba(0,0,0,.45), 0 4px 14px rgba(0,0,0,.6);
   }
-  .card h2 { font-size: 1.35rem; letter-spacing: .02em; line-height: 1.05; margin-bottom: 10px; }
+  .card h2 { font-size: clamp(1.15rem, 3.6vh, 1.55rem); letter-spacing: .02em; line-height: 1.05; margin-bottom: 10px; }
   .card .nota { font-size: 1rem; }
-  .card h2.longo { font-size: 1.05rem; line-height: 1.12; }
+  .card h2.longo { font-size: 1.2rem; line-height: 1.12; }
   .card .tag {
     display: inline-block; padding: 5px 12px; border-radius: 99px; font-size: .62rem;
     letter-spacing: .08em; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.35);
@@ -418,6 +419,60 @@
   .antes.depois { margin-top: 8px; }
   .antes-texto { font-size: .98rem; line-height: 1.7; margin-top: 12px; }
   .antes-texto b { color: var(--dourado); }
+
+  /* ===== Menu inicial: frase e cartinha-surpresa ===== */
+  .menu { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding-top: 6px; }
+  .frase-topo {
+    font-family: 'Great Vibes', cursive; font-weight: 400; font-size: clamp(2rem, 7vw, 3.1rem); line-height: 1.1;
+    margin: 0; text-align: center; padding: 0 12px;
+    background: linear-gradient(90deg, #ffb3c7, #f5d6a0, #ffb3c7); -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 2px 12px rgba(0,0,0,.6));
+  }
+  .carta-surpresa { position: relative; z-index: 2; width: 150px; height: 112px; margin-top: 2px; border: 0; padding: 0; background: none; cursor: pointer; perspective: 600px; }
+  .env-corpo, .env-aba, .env-papel, .env-frente { position: absolute; left: 0; right: 0; }
+  .env-corpo {                          /* costas do envelope */
+    bottom: 0; height: 84px; border-radius: 4px;
+    background: linear-gradient(160deg, #f3e3c2, #dcc79b); box-shadow: 0 10px 24px rgba(0,0,0,.55), inset 0 0 0 1px rgba(120,85,40,.35);
+  }
+  .env-papel {                          /* cartinha dentro */
+    bottom: 6px; height: 74px; margin: 0 10px; border-radius: 3px; background: #fffaf0; box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    display: grid; place-items: center; font-family: Georgia, serif; color: #6d1a2c; font-size: .72rem; text-align: center; line-height: 1.25;
+    transition: transform .8s cubic-bezier(.22,.8,.25,1); z-index: 2;
+  }
+  .env-frente {                         /* frente com as dobras laterais e de baixo */
+    bottom: 0; height: 84px; z-index: 3; border-radius: 4px; pointer-events: none;
+    background:
+      linear-gradient(to top right, transparent 49.5%, rgba(140,100,50,.35) 50%, #ecdcb4 50.5%) left / 50% 100% no-repeat,
+      linear-gradient(to top left, transparent 49.5%, rgba(140,100,50,.35) 50%, #ecdcb4 50.5%) right / 50% 100% no-repeat,
+      linear-gradient(to bottom, transparent 55%, #e6d3a6 55.5%);
+    filter: drop-shadow(0 -1px 1px rgba(120,85,40,.3));
+  }
+  .env-aba {                            /* aba triangular que abre */
+    bottom: 56px; height: 56px; z-index: 4; transform-origin: bottom center; transition: transform .6s ease .1s, z-index 0s .35s;
+    background: linear-gradient(180deg, #e9d6a8, #d4be8c); clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    filter: drop-shadow(0 2px 2px rgba(80,50,20,.4));
+  }
+  .selo-cera {
+    position: absolute; left: 50%; top: 66px; transform: translateX(-50%); z-index: 5; width: 26px; height: 26px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #e0405f, #8e1228); color: #ffd6df; display: grid; place-items: center; font-size: .8rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,.5); transition: opacity .3s;
+  }
+  .carta-surpresa:hover .env-corpo { transform: translateY(-2px); }
+  .carta-surpresa:not(.aberta) { animation: pulinho 2.4s ease-in-out infinite; }
+  @keyframes pulinho { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  .carta-surpresa.aberta .env-aba { transform: rotateX(180deg); z-index: 1; }
+  .carta-surpresa.aberta .selo-cera { opacity: 0; }
+  .carta-surpresa.aberta .env-papel { transform: translateY(-46px); }
+  .surpresa-link {
+    display: none; position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, -4px); margin-bottom: 4px;
+    white-space: nowrap; text-decoration: none; padding: 10px 18px; border-radius: 99px;
+    font-family: 'Arial Black', Arial, sans-serif; text-transform: uppercase; font-size: .72rem; letter-spacing: .06em;
+    color: #3a0516; background: linear-gradient(90deg, #f5d6a0, #ffe9b8); box-shadow: 0 6px 22px rgba(245,214,160,.5);
+    z-index: 10;
+  }
+  .carta-surpresa.aberta ~ .surpresa-link { display: block; animation: aparecer-link .6s .5s both; }
+  @keyframes aparecer-link { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, -4px); } }
+  .dica-carta { font-size: .72rem; opacity: .75; margin-top: 4px; }
   .quadro-wrap { display: flex; justify-content: center; margin: 4px 0 16px; }
   .quadro {                                /* quadro grande em cima dos dados */
     padding: 10px; border-radius: 14px; max-width: min(100%, 440px);
@@ -491,6 +546,8 @@
 </head>
 <body>
 
+<div class="menu">
+  <p class="frase-topo">Sempre pensando no meu bebê &#10084;</p>
 <div class="palco" id="palco">
   <div class="card ativo" data-i="0">
     <div class="foto"></div>
@@ -506,6 +563,19 @@
     <div class="foto"></div>
     <span class="nota">&#9733; 10</span>
     <div class="info"><h2>Planos e metas</h2><span class="tag">o futuro</span></div>
+  </div>
+</div>
+
+  <div class="carta-wrap" style="position:relative;display:flex;flex-direction:column;align-items:center">
+    <button class="carta-surpresa" id="carta-surpresa" type="button" aria-label="Abrir a cartinha-surpresa" aria-expanded="false">
+      <span class="env-corpo"></span>
+      <span class="env-papel">Uma surpresa<br>pra nós dois &#10084;</span>
+      <span class="env-frente"></span>
+      <span class="env-aba"></span>
+      <span class="selo-cera">&#10084;</span>
+    </button>
+    <a class="surpresa-link" id="surpresa-link" href="https://lista.mercadolivre.com.br/aliancas" target="_blank" rel="noopener noreferrer">&#128141; Ver as alianças no Mercado Livre &#8599;</a>
+    <span class="dica-carta" id="dica-carta">toque na cartinha</span>
   </div>
 </div>
 
@@ -1394,6 +1464,16 @@
     pts.forEach((p, n) => p.addEventListener('click', e => { e.stopPropagation(); ir(n); auto(); }));
     auto();
   });
+
+  /* ===== Cartinha-surpresa ===== */
+  (() => {
+    const b = document.getElementById('carta-surpresa'), dica = document.getElementById('dica-carta');
+    b.addEventListener('click', () => {
+      const abriu = b.classList.toggle('aberta');
+      b.setAttribute('aria-expanded', String(abriu));
+      dica.textContent = abriu ? 'uma surpresa pra nós dois' : 'toque na cartinha';
+    });
+  })();
 
   /* ===== Janela: planos e metas ===== */
   const janelaPlanos = document.getElementById('janela-planos');
