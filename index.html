@@ -521,10 +521,6 @@
   .opcao.clicavel { transition: transform .7s cubic-bezier(.22,.8,.25,1), box-shadow .7s ease, border-color .7s ease; }
   .musica.tocando { animation: pulso-musica 2.8s ease-in-out infinite; }
   @keyframes pulso-musica { 0%,100% { box-shadow: 0 0 22px rgba(255,40,90,.5); } 50% { box-shadow: 0 0 38px rgba(255,40,90,.95); } }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-    .coracao-flut { display: none; }
-  }
   .quadro-wrap { display: flex; justify-content: center; margin: 4px 0 16px; }
   .quadro {                                /* quadro grande em cima dos dados */
     padding: 10px; border-radius: 14px; max-width: min(100%, 440px);
